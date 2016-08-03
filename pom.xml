@@ -75,6 +75,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			 <plugin>
+        <groupId>org.cloudfoundry</groupId>
+        <artifactId>cf-maven-plugin</artifactId>
+        <version>1.0.0.M1</version>
+    </plugin>
 		</plugins>
 	</build>
 
@@ -93,4 +98,12 @@
         <url>http://repo.spring.io/release</url>
     </repository> -->
 </repositories>
+
+<pluginRepositories>
+	<pluginRepository>
+	    <id>repository.springframework.maven.milestone</id>
+	    <name>Spring Framework Maven Milestone Repository</name>
+	    <url>http://maven.springframework.org/milestone</url>
+	</pluginRepository>
+</pluginRepositories>
 </project>
