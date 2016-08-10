@@ -11,6 +11,7 @@ import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.domain.ApplicationStats;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,18 +32,36 @@ public class CFMetricsController {
 
 	}
 
-	@RequestMapping(value = "/getFreeMematOrg", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public long getFreeMematOrg() {
+	
+	/**
+	 * This Controller fetches the free available resource based on the Resource Type at the Org Level
+	 * @param resourceType
+	 * @return
+	 */
+	@RequestMapping(value = "/getFreeResource/{resourceType}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public String getFreeResource(@PathVariable String resourceType) {
 
 		CloudFoundryClient client = loginCloudFoundry();
-		long memoryquota = client.getQuotaByName("trial", true).getMemoryLimit() * 1024 * 1024;
-		System.out.println("Memory Quota ::::" + memoryquota);
-		for (CloudApplication application : client.getApplications()) {
-			memoryquota = memoryquota
-					- ((client.getApplicationStats(application.getName()).getRecords().get(0).getUsage().getMem()));
 
+		if (resourceType.equals("MEM")) {
+			long memoryquota = client.getQuotaByName("trial", true).getMemoryLimit() * 1024 * 1024;
+
+			for (CloudApplication application : client.getApplications()) {
+				memoryquota = memoryquota
+						- ((client.getApplicationStats(application.getName()).getRecords().get(0).getUsage().getMem()));
+			}
+			return String.valueOf(memoryquota);
+		} else if (resourceType.equals("CPU")) {
+			double cpuQuota = 1.0;
+			for (CloudApplication application : client.getApplications()) {
+				cpuQuota = cpuQuota
+						- ((client.getApplicationStats(application.getName()).getRecords().get(0).getUsage().getMem()));
+			}
+			return String.valueOf(cpuQuota);
+		} else {
+			// TODO : Not implemented for Disk usage 
+			return null;
 		}
-		return memoryquota;
 	}
 
 	private URL getTargetURL(String target) {
