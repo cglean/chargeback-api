@@ -32,31 +32,37 @@ public class CFMetricsController {
 
 	}
 
+
+	/**
+	 * This Controller fetches the free available resource based on the Resource Type at the Org Level
+	 * @param resourceType
+	 * @return
+	 */
 	@RequestMapping(value = "/getFreeResource/{resourceType}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public String getFreeMematOrg(@PathVariable String resourceType) {
+	public String getFreeResource(@PathVariable String resourceType) {
 
 		CloudFoundryClient client = loginCloudFoundry();
-		if(resourceType.equals("MEM")){
-		long memoryquota = client.getQuotaByName("trial", true).getMemoryLimit() * 1024 * 1024;
-		for (CloudApplication application : client.getApplications()) {
-			memoryquota = memoryquota
-					- ((client.getApplicationStats(application.getName()).getRecords().get(0).getUsage().getMem()));
 
-		}
-		return String.valueOf(memoryquota);
-		}else if(resourceType.equals("CPU")){
+		if (resourceType.equals("MEM")) {
+			long memoryquota = client.getQuotaByName("trial", true).getMemoryLimit() * 1024 * 1024;
+
+			for (CloudApplication application : client.getApplications()) {
+				memoryquota = memoryquota
+						- ((client.getApplicationStats(application.getName()).getRecords().get(0).getUsage().getMem()));
+			}
+			return String.valueOf(memoryquota);
+		} else if (resourceType.equals("CPU")) {
 			double cpuQuota = 1.0;
 			for (CloudApplication application : client.getApplications()) {
 				cpuQuota = cpuQuota
-						- ((client.getApplicationStats(application.getName()).getRecords().get(0).getUsage().getCpu()));
-
+						- ((client.getApplicationStats(application.getName()).getRecords().get(0).getUsage().getMem()));
 			}
 			return String.valueOf(cpuQuota);
-		}else{
-			// TODO to be implemented
+		} else {
+			// TODO : Not implemented for Disk usage 
 			return null;
 		}
-		
+
 	}
 
 		
