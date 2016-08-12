@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
-import org.cloudfoundry.client.lib.domain.ApplicationStats;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.CloudSpace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +28,6 @@ public class CFMetricsController {
 	@Autowired
 	private ChargeBackService chargebackService;
 	
-
-	@RequestMapping(value = "/getmetrics", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<ApplicationStats> getMetrics() {
-
-		CloudFoundryClient client = loginCloudFoundry();
-		final List<ApplicationStats> applicationDataList = new ArrayList<>();
-		for (CloudApplication application : client.getApplications()) {
-			applicationDataList.add(client.getApplicationStats(application.getName()));
-
-		}
-		return applicationDataList;
-
-	}
-
 
 	/**
 	 * This Controller fetches the free available resource based on the Resource Type at the Org Level
@@ -103,6 +88,14 @@ public class CFMetricsController {
 				filter(cloudspace -> cloudspace.getOrganization().getName().equals(orgName)).map(cloudspace -> cloudspace.getName()).collect(Collectors.toList());
 	}
 	
+	
+	@RequestMapping(value = "/getOrgList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)	
+	public List<String> getOrgList(){
+		CloudFoundryClient client = loginCloudFoundry();
+		client.login();
+		return client.getOrganizations().stream().map(org -> org.getName()).collect(Collectors.toList());
+	}
+	
 	private URL getTargetURL(String target) {
 		try {
 			return URI.create(target).toURL();
@@ -110,10 +103,6 @@ public class CFMetricsController {
 			throw new RuntimeException("The target URL is not valid: " + e.getMessage());
 		}
 	}
-	
-	
-	
-	
 	
 	private CloudFoundryClient loginCloudFoundry() {
 		CloudCredentials credentials = new CloudCredentials("amit.bansal@capgemini.com", "trtr22");
@@ -123,9 +112,6 @@ public class CFMetricsController {
 		return client;
 	}
 	
-	
-	
-	
 	@RequestMapping(value = "/getapps", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<CloudApplication> getapps() {
 
@@ -133,5 +119,4 @@ public class CFMetricsController {
 		return client.getApplications();
 
 	}
-	
 }
