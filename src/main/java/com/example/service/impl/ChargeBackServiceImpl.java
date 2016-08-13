@@ -6,8 +6,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.cloudfoundry.client.lib.domain.InstanceStats;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.entity.Usage;
+import com.example.repository.UsageRepository;
 import com.example.service.ChargeBackService;
 import com.example.vo.ChargeBackAggregrateVO;
 import com.example.vo.ChargeBackUsageResponse;
@@ -20,6 +26,10 @@ import com.example.vo.ChargeBackUsageResponse;
 @Service
 public class ChargeBackServiceImpl implements ChargeBackService {
 
+	@Autowired
+	private UsageRepository usageRepository;
+	
+	
 	final Function<ChargeBackAggregrateVO, List<ChargeBackUsageResponse>> maptoUsage 
     = new Function<ChargeBackAggregrateVO, List<ChargeBackUsageResponse>>() {
     
@@ -50,6 +60,11 @@ public class ChargeBackServiceImpl implements ChargeBackService {
 		final List<ChargeBackUsageResponse> chargeBackUsageResponses =  new ArrayList<>();
 		chargeBackAggregrateVOs.stream().map(maptoUsage).collect(Collectors.toList()).stream().flatMap(records -> records.stream()).forEach(chargeBackUsageResponses::add);
 		return chargeBackUsageResponses;
+	}
+	
+	@Transactional(isolation=Isolation.SERIALIZABLE, propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public void persistUsageData(Usage usage) {
+		usageRepository.save(usage);	
 	}
 
 	

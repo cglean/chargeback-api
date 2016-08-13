@@ -1,12 +1,13 @@
 package com.example.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Usage {
+public class Usage implements Serializable{
 
 	@Id
 	private long id;
