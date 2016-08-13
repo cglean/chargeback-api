@@ -1,6 +1,5 @@
 package com.example.entity;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -9,95 +8,125 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Table;
 
 @Entity
-public class Usage implements Serializable{
+@Table(name="usage_stat")
+public class Usage {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4209467756946478997L;
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	private long usageId;
 	
 	private double cpu;
 	private long memory;
 	private long disk;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp time;
+	private Timestamp createdTime;
 	private String orgName;
 	private String appname;
 	private String spaceName;
 	private int instanceIndex;
-	public long getId() {
-		return id;
+	
+	
+	public long getUsageId() {
+		return usageId;
 	}
-	public void setId(long id) {
-		this.id = id;
+
+
+	public void setUsageId(long usageId) {
+		this.usageId = usageId;
 	}
+
+
 	public double getCpu() {
 		return cpu;
 	}
+
+
 	public void setCpu(double cpu) {
 		this.cpu = cpu;
 	}
+
+
 	public long getMemory() {
 		return memory;
 	}
+
+
 	public void setMemory(long memory) {
 		this.memory = memory;
 	}
+
+
 	public long getDisk() {
 		return disk;
 	}
+
+
 	public void setDisk(long disk) {
 		this.disk = disk;
 	}
-	
-	public Timestamp getTime() {
-		return time;
+
+
+	public Timestamp getCreatedTime() {
+		return createdTime;
 	}
-	public void setTime(Timestamp time) {
-		this.time = time;
+
+
+	public void setCreatedTime(Timestamp createdTime) {
+		this.createdTime = createdTime;
 	}
+
+
 	public String getOrgName() {
 		return orgName;
 	}
+
+
 	public void setOrgName(String orgName) {
 		this.orgName = orgName;
 	}
+
+
 	public String getAppname() {
 		return appname;
 	}
+
+
 	public void setAppname(String appname) {
 		this.appname = appname;
 	}
+
+
 	public String getSpaceName() {
 		return spaceName;
 	}
+
+
 	public void setSpaceName(String spaceName) {
 		this.spaceName = spaceName;
 	}
+
+
 	public int getInstanceIndex() {
 		return instanceIndex;
 	}
+
+
 	public void setInstanceIndex(int instanceIndex) {
 		this.instanceIndex = instanceIndex;
 	}
+
+
 	@Override
 	public String toString() {
-		return "Usage [id=" + id + ", cpu=" + cpu + ", memory=" + memory + ", disk=" + disk + ", time=" + time
+		return "Usage [id=" + usageId + ", cpu=" + cpu + ", memory=" + memory + ", disk=" + disk + ", time=" + createdTime
 				+ ", orgName=" + orgName + ", appname=" + appname + ", spaceName=" + spaceName + ", instanceIndex="
 				+ instanceIndex + "]";
 	}
-	@PrePersist
-	public void pouplateDate(){
-		this.time = new Timestamp(new Date().getTime());
+	@PrePersist	
+	public void populateCreatedDate(){
+		createdTime = new Timestamp(new Date().getTime());
 	}
-	
-	
 }

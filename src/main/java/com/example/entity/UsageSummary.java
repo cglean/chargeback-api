@@ -1,47 +1,52 @@
 package com.example.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+
 
 @Entity
 public class UsageSummary {
 
 	@Id
-	@GeneratedValue
-	private long id;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp fromDate;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp toDate;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private long summaryId;
+	@Temporal(TemporalType.DATE)
+	private Date fromDate;
+	@Temporal(TemporalType.DATE)
+
+	private Date toDate;
 	private double cpu;
 	private long memory;
 	private long disk;
-	private Timestamp time;
 	private String orgName;
 	private String appname;
 	private String spaceName;
 	private int instanceIndex;
-	public long getId() {
-		return id;
+	
+	
+	public long getSummaryId() {
+		return summaryId;
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setSummaryId(long summaryId) {
+		this.summaryId = summaryId;
 	}
-	public Timestamp getFromDate() {
+	public Date getFromDate() {
 		return fromDate;
 	}
-	public void setFromDate(Timestamp fromDate) {
+	public void setFromDate(Date fromDate) {
 		this.fromDate = fromDate;
 	}
-	public Timestamp getToDate() {
+	public Date getToDate() {
 		return toDate;
 	}
-	public void setToDate(Timestamp toDate) {
+	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}
 	public double getCpu() {
@@ -62,12 +67,7 @@ public class UsageSummary {
 	public void setDisk(long disk) {
 		this.disk = disk;
 	}
-	public Timestamp getTime() {
-		return time;
-	}
-	public void setTime(Timestamp time) {
-		this.time = time;
-	}
+	
 	public String getOrgName() {
 		return orgName;
 	}
