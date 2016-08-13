@@ -1,12 +1,15 @@
-package com.example.vo;
+package com.example.entity;
 
 import java.util.Date;
-/**
- * 
- * @author ambansal
- *
- */
-public class ChargeBackUsageResponse {
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Usage {
+
+	@Id
+	private long id;
 	
 	private double cpu;
 	private long memory;
@@ -15,7 +18,13 @@ public class ChargeBackUsageResponse {
 	private String orgName;
 	private String appname;
 	private String spaceName;
-	private String instanceIndex;
+	private int instanceIndex;
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public double getCpu() {
 		return cpu;
 	}
@@ -34,7 +43,6 @@ public class ChargeBackUsageResponse {
 	public void setDisk(long disk) {
 		this.disk = disk;
 	}
-	
 	public Date getTime() {
 		return time;
 	}
@@ -59,11 +67,18 @@ public class ChargeBackUsageResponse {
 	public void setSpaceName(String spaceName) {
 		this.spaceName = spaceName;
 	}
-	public String getInstanceIndex() {
+	public int getInstanceIndex() {
 		return instanceIndex;
 	}
-	public void setInstanceIndex(String instanceIndex) {
+	public void setInstanceIndex(int instanceIndex) {
 		this.instanceIndex = instanceIndex;
 	}
+	@Override
+	public String toString() {
+		return "Usage [id=" + id + ", cpu=" + cpu + ", memory=" + memory + ", disk=" + disk + ", time=" + time
+				+ ", orgName=" + orgName + ", appname=" + appname + ", spaceName=" + spaceName + ", instanceIndex="
+				+ instanceIndex + "]";
+	}
+	
 	
 }
