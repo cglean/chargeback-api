@@ -14,10 +14,12 @@ import org.cloudfoundry.client.lib.domain.CloudSpace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.entity.Usage;
 import com.example.service.ChargeBackService;
 import com.example.vo.ChargeBackAggregrateVO;
 import com.example.vo.ChargeBackUsageResponse;
@@ -119,4 +121,19 @@ public class CFMetricsController {
 		return client.getApplications();
 
 	}
+	
+	
+	/**
+	 * Store the Data into database
+	 * @param usageList
+	 */
+	@RequestMapping(value = "/submit", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
+	public void storeHistoricalRecords(@RequestBody List<Usage> usageList ){
+		for(Usage usage : usageList){
+			chargebackService.persistUsageData(usage);
+		}
+	}
+	
+	
+	
 }

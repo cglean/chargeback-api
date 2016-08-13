@@ -62,7 +62,7 @@ public class ChargeBackServiceImpl implements ChargeBackService {
 		return chargeBackUsageResponses;
 	}
 	
-	@Transactional(isolation=Isolation.SERIALIZABLE, propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public void persistUsageData(Usage usage) {
 		usageRepository.save(usage);	
 	}

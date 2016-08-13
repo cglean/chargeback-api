@@ -1,33 +1,26 @@
 package com.example.entity;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class Usage implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4209467756946478997L;
+public class UsageSummary {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue
 	private long id;
-	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Timestamp fromDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Timestamp toDate;
 	private double cpu;
 	private long memory;
 	private long disk;
-	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp time;
 	private String orgName;
 	private String appname;
@@ -38,6 +31,18 @@ public class Usage implements Serializable{
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	public Timestamp getFromDate() {
+		return fromDate;
+	}
+	public void setFromDate(Timestamp fromDate) {
+		this.fromDate = fromDate;
+	}
+	public Timestamp getToDate() {
+		return toDate;
+	}
+	public void setToDate(Timestamp toDate) {
+		this.toDate = toDate;
 	}
 	public double getCpu() {
 		return cpu;
@@ -57,7 +62,6 @@ public class Usage implements Serializable{
 	public void setDisk(long disk) {
 		this.disk = disk;
 	}
-	
 	public Timestamp getTime() {
 		return time;
 	}
@@ -88,16 +92,7 @@ public class Usage implements Serializable{
 	public void setInstanceIndex(int instanceIndex) {
 		this.instanceIndex = instanceIndex;
 	}
-	@Override
-	public String toString() {
-		return "Usage [id=" + id + ", cpu=" + cpu + ", memory=" + memory + ", disk=" + disk + ", time=" + time
-				+ ", orgName=" + orgName + ", appname=" + appname + ", spaceName=" + spaceName + ", instanceIndex="
-				+ instanceIndex + "]";
-	}
-	@PrePersist
-	public void pouplateDate(){
-		this.time = new Timestamp(new Date().getTime());
-	}
+	
 	
 	
 }
