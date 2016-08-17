@@ -36,6 +36,7 @@ public class CFMetricsController {
 	 * @param resourceType
 	 * @return
 	 */
+	
 	@RequestMapping(value = "/getFreeResource/{resourceType}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String getFreeResource(@PathVariable String resourceType) {
 
@@ -60,6 +61,7 @@ public class CFMetricsController {
 			// TODO : Not implemented for Disk usage 
 			return null;
 		}
+		
 
 	}
 
@@ -107,12 +109,14 @@ public class CFMetricsController {
 	}
 	
 	private CloudFoundryClient loginCloudFoundry() {
-		CloudCredentials credentials = new CloudCredentials("amit.bansal@capgemini.com", "trtr22");
+		CloudCredentials credentials = new CloudCredentials("abhilash.hc@capgemini.com", "Passw0rd123");
 		CloudFoundryClient client = new CloudFoundryClient(credentials, getTargetURL("https://api.run.pivotal.io"));
 		client.login();
 		
 		return client;
+		
 	}
+	
 	
 	@RequestMapping(value = "/getapps", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<CloudApplication> getapps() {
