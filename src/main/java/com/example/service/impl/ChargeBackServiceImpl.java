@@ -1,7 +1,10 @@
 package com.example.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -13,7 +16,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entity.Usage;
+import com.example.entity.UsageSummary;
 import com.example.repository.UsageRepository;
+import com.example.repository.UsageSummaryRepository;
 import com.example.service.ChargeBackService;
 import com.example.vo.ChargeBackAggregrateVO;
 import com.example.vo.ChargeBackUsageResponse;
@@ -29,6 +34,8 @@ public class ChargeBackServiceImpl implements ChargeBackService {
 	@Autowired
 	private UsageRepository usageRepository;
 	
+	@Autowired
+	private UsageSummaryRepository usageSummaryRepository;
 	
 	final Function<ChargeBackAggregrateVO, List<ChargeBackUsageResponse>> maptoUsage 
     = new Function<ChargeBackAggregrateVO, List<ChargeBackUsageResponse>>() {
@@ -68,5 +75,35 @@ public class ChargeBackServiceImpl implements ChargeBackService {
 	}
 
 	
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public void persistUsageSummaryData(UsageSummary usageSummary) {
+		usageSummaryRepository.save(usageSummary);	
+		
+	}
+	
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public Map<String, List<Usage>> getUsageDataBetweenDates(final Date fromDate , final Date toDate){
+		
+		Map<String, List<Usage>> summaryUsageMap = new HashMap<>();
+		List<String> orgNameList  = usageRepository.findDistinctOrgName(fromDate, toDate);
+		for(String orgName : orgNameList){
+			List<String> spaceList = usageRepository.findDistinctSpaceName(fromDate, toDate, orgName);
+			for(String space: spaceList){
+				List<String> appNameList = usageRepository.findDistinctApps(fromDate, toDate, orgName, space);
+						for(String appname : appNameList){
+							List<Integer> instanceIndexList = usageRepository.findIndexesforApp(fromDate, toDate, orgName, space, appname);
+							for(Integer index : instanceIndexList){
+								List<Usage> usagePerAppPerInstance = usageRepository.findByDateAndNameAndApplication(fromDate, toDate, orgName, space, appname, index);
+								summaryUsageMap.put(orgName+space+appname+index, usagePerAppPerInstance);
+							}
+						}
+					}
+		}
+		return summaryUsageMap;
+	}
+	
 	
 }
+
+
+

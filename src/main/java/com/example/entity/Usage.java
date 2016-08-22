@@ -1,6 +1,5 @@
 package com.example.entity;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -9,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="usage_stat")
@@ -22,7 +23,8 @@ public class Usage {
 	private double cpu;
 	private long memory;
 	private long disk;
-	private Timestamp createdTime;
+	@Temporal(TemporalType.DATE)
+	private Date createdTime;
 	private String orgName;
 	private String appname;
 	private String spaceName;
@@ -69,12 +71,13 @@ public class Usage {
 	}
 
 
-	public Timestamp getCreatedTime() {
+	
+	public Date getCreatedTime() {
 		return createdTime;
 	}
 
 
-	public void setCreatedTime(Timestamp createdTime) {
+	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
 
@@ -127,6 +130,6 @@ public class Usage {
 	}
 	@PrePersist	
 	public void populateCreatedDate(){
-		createdTime = new Timestamp(new Date().getTime());
+		createdTime =new Date();
 	}
 }

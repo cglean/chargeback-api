@@ -4,7 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.cloudfoundry.client.lib.CloudCredentials;
@@ -12,11 +14,13 @@ import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.CloudSpace;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Usage;
@@ -109,7 +113,7 @@ public class CFMetricsController {
 	}
 	
 	private CloudFoundryClient loginCloudFoundry() {
-		CloudCredentials credentials = new CloudCredentials("abhilash.hc@capgemini.com", "Passw0rd123");
+		CloudCredentials credentials = new CloudCredentials("amit.bansal@capgemini.com", "trtr22");
 		CloudFoundryClient client = new CloudFoundryClient(credentials, getTargetURL("https://api.run.pivotal.io"));
 		client.login();
 		
@@ -138,6 +142,10 @@ public class CFMetricsController {
 		}
 	}
 	
-	
+	@RequestMapping(value="/getHistorical/{fromDate}/{toDate}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, List<Usage>> getUsageDataBetweenDates(@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date fromDate, 
+			@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date toDate){
+		return chargebackService.getUsageDataBetweenDates(fromDate, toDate);
+	}
 	
 }
