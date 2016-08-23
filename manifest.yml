@@ -1,10 +1,9 @@
 ---
 applications:
-- name: metricsFetchTest
+- name: chargeback-api
   memory: 512M
   random-route: true
   host: chargeback-api
-  buildpack: https://github.com/cloudfoundry/java-buildpack.git
-  services:
-    - eureka
+
+ 
 path: target/demo-0.0.1-SNAPSHOT.jar

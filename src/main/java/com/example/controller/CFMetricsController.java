@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.client.lib.HttpProxyConfiguration;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.CloudSpace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Usage;
@@ -113,9 +113,10 @@ public class CFMetricsController {
 	}
 	
 	private CloudFoundryClient loginCloudFoundry() {
-		CloudCredentials credentials = new CloudCredentials("amit.bansal@capgemini.com", "trtr22");
-		CloudFoundryClient client = new CloudFoundryClient(credentials, getTargetURL("https://api.run.pivotal.io"));
-		client.login();
+		CloudCredentials credentials = new CloudCredentials("amit.bansal@capgemini.com", "Capgemini2016");
+		
+		//CloudFoundryClient client = new CloudFoundryClient(credentials, getTargetURL("https://api.cglean.com"));
+		CloudFoundryClient client = new CloudFoundryClient(credentials, getTargetURL("http://api.cglean.com"), null, (HttpProxyConfiguration) null, true);
 		
 		return client;
 		
