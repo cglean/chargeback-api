@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.entity.Usage;
+import com.example.entity.UsageSummary;
 import com.example.vo.ChargeBackAggregrateVO;
 import com.example.vo.ChargeBackUsageResponse;
 
@@ -15,5 +16,7 @@ public interface ChargeBackService {
 	void persistUsageData(Usage usage);
 	
 	public Map<String, List<Usage>> getUsageDataBetweenDates(final Date fromDate , final Date toDate);
+	
+	void persistUsageSummaryData(UsageSummary usageSummary);
 
 }

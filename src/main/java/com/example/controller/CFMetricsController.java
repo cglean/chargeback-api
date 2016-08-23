@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Usage;
+import com.example.entity.UsageSummary;
 import com.example.service.ChargeBackService;
 import com.example.vo.ChargeBackAggregrateVO;
 import com.example.vo.ChargeBackUsageResponse;
@@ -148,5 +149,12 @@ public class CFMetricsController {
 			@PathVariable @DateTimeFormat(pattern="yyyy-MM-dd") Date toDate){
 		return chargebackService.getUsageDataBetweenDates(fromDate, toDate);
 	}
+
 	
+	@RequestMapping(value = "/submit/summary", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
+	public void storeUsageSummary(@RequestBody List<UsageSummary> usageSummaryList ){
+		for(UsageSummary usageSummary : usageSummaryList){
+			chargebackService.persistUsageSummaryData(usageSummary);
+		}
+	}
 }

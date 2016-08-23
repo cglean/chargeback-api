@@ -28,6 +28,7 @@ public class UsageSummary {
 	private String orgName;
 	private String appname;
 	private String spaceName;
+	private String frequency;
 	private int instanceIndex;
 	
 	
@@ -91,6 +92,12 @@ public class UsageSummary {
 	}
 	public void setInstanceIndex(int instanceIndex) {
 		this.instanceIndex = instanceIndex;
+	}
+	public String getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
 	}
 	
 	

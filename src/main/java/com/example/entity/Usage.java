@@ -19,7 +19,6 @@ public class Usage {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long usageId;
-	
 	private double cpu;
 	private long memory;
 	private long disk;
